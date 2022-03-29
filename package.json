@@ -1,0 +1,23 @@
+{
+  "name": "pdf2image-py",
+  "version": "0.0.1",
+  "description": "Conversor de pdfs para imagens em script python",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devsergionunes/pdf2image-py.git"
+  },
+  "keywords": [
+    "python",
+    "child_node"
+  ],
+  "author": "devsergionunes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/devsergionunes/pdf2image-py/issues"
+  },
+  "homepage": "https://github.com/devsergionunes/pdf2image-py#readme"
+}
