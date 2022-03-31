@@ -22,11 +22,11 @@ pages = convert_from_path(
     output_folder=params["outPutFolder"],
     first_page= params["fistPage"] or None,
     last_page=params["lastPage"] or None,
-    output_file=params["outNameFile"],
+    output_file=params["outPutName"],
     jpegopt={
-        "quality": 100,
-        "progressive": True,
-        "optimize": True
+        "quality": params["jpegQuality"],
+        "progressive": params["isProgressive"],
+        "optimize": params["isOptimize"]
     },
     thread_count=params["threadCount"],
     userpw=None,
@@ -36,16 +36,21 @@ pages = convert_from_path(
     single_file=False,
     poppler_path=None,
     grayscale=False,
-    size=None,
+    size=(params["sizeWidth"] or None,params["sizeHeight"] or None),
     paths_only=False,
     hide_annotations=False,
 )
+outImages = os.listdir(params["outPutFolder"])
 
-# outImages = os.listdir(pages)
+if params['thumbnailOutPath']:
+    for i in range(len(outImages)):
+        caminhoImagem = params["outPutFolder"] + '/' + outImages[i]
+        image = Image.open(caminhoImagem)
+        width, height = image.size
+        image.thumbnail((params['thumbnailWidth'] or width, params['thumbnailHeight'] or height))
+        image.save(params['thumbnailOutPath'] + '/{}-{}.{}'.format(
+            params['thumbnailOutName'],i, params['thumbnailFmt']), params['thumbnailFmt'].upper())
 
-# for i in range(len(outImages)):
-#     caminhoImagem = sys.argv[1] + "/paginas/" + outImages[i]
-#     image = Image.open(caminhoImagem)
-#     width, height = image.size
-#     image.thumbnail((width, height))
-#     image.save(sys.argv[1] + "/miniaturas/" + outImages[i], 'JPEG')
+    print("sucess")
+else:
+    print("sucess")

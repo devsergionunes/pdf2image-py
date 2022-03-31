@@ -1,23 +1,52 @@
 interface IConvertPDFToImage {
   pdfPath: string;
   outPutFolder: string;
-  outNameFile?: string;
+  outPutName?: string;
   dpi?: 100 | 150 | 200 | 250 | 300;
-  fmt?: "jpeg" | "png" | "ppm" | "tiff";
+  fmt?: "jpeg" | "png" | "ppm" | "tif";
   fistPage?: boolean | number;
   lastPage?: boolean | number ;
   timeout?: number;
   threadCount?: 1 | 2 | 3 | 4;
   size?: {
-    width?: string;
-    height?: string;
+    width?: number | boolean;
+    height?: number | boolean;
   };
-  thumbnailWidth?: {
-    width?: string;
-    height?: string;
-    fmt: "jpeg" | "png" | "ppm" | "tiff";
+  jpegOptions?: {
+    quality?: number;
+    progressive?: boolean;
+    optimize?: boolean;
+  }
+  thumbnail?: {
+    outPath: string;
+    outPutName?: string;
+    width?: number | boolean;
+    height?: number | boolean;
+    fmt?: "jpeg" | "png";
   };
 };
+
+interface IRunConverter {
+  pdfPath: string;
+  outPutFolder: string;
+  outPutName: string;
+  dpi: 100 | 150 | 200 | 250 | 300;
+  fmt: "jpeg" | "png" | "ppm" | "tif";
+  fistPage: boolean | number;
+  lastPage: boolean | number ;
+  timeout: number;
+  threadCount: 1 | 2 | 3 | 4;
+  sizeWidth: number | boolean;
+  sizeHeight: number | boolean;
+  thumbnailOutPath: string | boolean;
+  thumbnailOutName: string;
+  thumbnailWidth: number | boolean;
+  thumbnailHeight: number | boolean;
+  thumbnailFmt: "jpeg" | "png";
+  jpegQuality: boolean | number;
+  isProgressive: boolean | number;
+  isOptimize: boolean | number;
+}
 
 import { spawn } from "child_process";
 import  path from "path";
@@ -26,15 +55,24 @@ import  path from "path";
 function runConverter({
   pdfPath, 
   outPutFolder,
-  outNameFile,
+  outPutName,
   dpi,
   fmt,
   timeout,
   threadCount,
-  // size,
   fistPage,
   lastPage,
-}:IConvertPDFToImage) {
+  sizeWidth,
+  sizeHeight,
+  thumbnailOutPath,
+  thumbnailOutName,
+  thumbnailWidth,
+  thumbnailHeight,
+  thumbnailFmt,
+  jpegQuality,
+  isProgressive,
+  isOptimize
+}:IRunConverter) {
   return new Promise((resolve, reject) => {
     const initPythonScript = path.join(__dirname, "pdf.py")
 
@@ -43,33 +81,46 @@ function runConverter({
       JSON.stringify({
         pdfPath, 
         outPutFolder,
-        outNameFile,
+        outPutName,
         dpi,
         fmt,
         threadCount,
         fistPage,
         lastPage,
+        sizeWidth,
+        sizeHeight,
+        thumbnailOutPath,
+        thumbnailOutName,
+        thumbnailWidth,
+        thumbnailHeight,
+        thumbnailFmt,
+        jpegQuality,
+        isProgressive,
+        isOptimize
       })
     ], {
         timeout,
     });
 
     pyprog.stdout.on('data', (data:any) => {
-        resolve(data)
+      console.log(`stdout: ${data.toString()}`);
+      resolve(data)
     })
 
     pyprog.stderr.on('data', (data: any) => {
-        reject(data)
+      console.log(`stderr: ${data.toString()}`);
+      reject(data)
     })
 
     pyprog.on('error', (error:any) => {
-        reject(error)
+      console.log(`stderr: ${error.toString()}`);
+      reject(error)
     })
 
     pyprog.on('close', (code:any) => {
-        if (code == 0)
-        resolve(true);
-        else reject(new Error("erro na conversão do pdf"));
+      if (code == 0)
+      resolve(true);
+      else reject(new Error("erro na conversão do pdf"));
     })
   })
 }
@@ -78,32 +129,39 @@ function runConverter({
 export async function convertPDFToImage({
   pdfPath,
   outPutFolder,
-  outNameFile,
+  outPutName,
   dpi,
   fmt,
   fistPage,
   lastPage,
-  // size,
+  size,
   timeout,
   threadCount,
-  // thumbnailWidth
+  thumbnail,
+  jpegOptions,
 }: IConvertPDFToImage) {
   try {
     const params = {
       pdfPath ,
       outPutFolder,
       dpi: dpi || 100,
-      fmt: fmt || "jpeg",
-      outNameFile: outNameFile || "image",
+      fmt: fmt?.toLocaleLowerCase() || "jpeg",
+      outPutName: outPutName || "image",
       timeout: timeout || 1000 * 60,
       threadCount: threadCount || 4,
-      fistPage: fistPage || false,
-      lastPage: lastPage || false,
-      // size: Object.keys(size as {}).length > 0 ?{
-      //   width: size?.width || "400",
-      //   height: size?.height || "400",
-      // } : undefined,
-    }
+      fistPage: !!fistPage ? fistPage : false,
+      lastPage: !!lastPage ? lastPage : false,
+      sizeWidth: size && size.width ? size.width : false,
+      sizeHeight: size && size.height ? size.height : false,
+      thumbnailOutPath: thumbnail && thumbnail.outPath ? thumbnail.outPath : false,
+      thumbnailOutName: thumbnail && thumbnail.outPutName ? thumbnail.outPutName : "thumbnail",
+      thumbnailWidth: thumbnail && thumbnail.width ? thumbnail.width : 120,
+      thumbnailHeight: thumbnail && thumbnail.height ? thumbnail.width : false,
+      thumbnailFmt: thumbnail && thumbnail.fmt ? thumbnail.fmt.toLocaleLowerCase() : "jpeg",
+      jpegQuality: jpegOptions?.quality || 100,
+      isProgressive: jpegOptions?.progressive || true,
+      isOptimize: jpegOptions?.optimize || true,
+    } as IRunConverter;
     const res : any = await runConverter(params);
     console.log(res.toString());
   } catch(err : any) {
@@ -111,9 +169,15 @@ export async function convertPDFToImage({
   }
 }
 
+// teste
 convertPDFToImage({
   pdfPath:`${__dirname}/pdf-example.pdf`,
   outPutFolder: `${__dirname}/out`,
+  outPutName: "teste2",
+  fmt: "png",
+  thumbnail: {
+    outPath: `${__dirname}/thumb`,
+  }
 }).then((res) => {
   console.log("res", res);
 }).catch((err) => {
