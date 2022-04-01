@@ -1,55 +1,8 @@
-interface IConvertPDFToImage {
-  pdfPath: string;
-  outPutFolder: string;
-  outPutName?: string;
-  dpi?: 100 | 150 | 200 | 250 | 300;
-  fmt?: "jpeg" | "png" | "ppm" | "tif";
-  fistPage?: boolean | number;
-  lastPage?: boolean | number ;
-  timeout?: number;
-  threadCount?: 1 | 2 | 3 | 4;
-  size?: {
-    width?: number | boolean;
-    height?: number | boolean;
-  };
-  jpegOptions?: {
-    quality?: number;
-    progressive?: boolean;
-    optimize?: boolean;
-  }
-  thumbnail?: {
-    outPath: string;
-    outPutName?: string;
-    width?: number | boolean;
-    height?: number | boolean;
-    fmt?: "jpeg" | "png";
-  };
-};
-
-interface IRunConverter {
-  pdfPath: string;
-  outPutFolder: string;
-  outPutName: string;
-  dpi: 100 | 150 | 200 | 250 | 300;
-  fmt: "jpeg" | "png" | "ppm" | "tif";
-  fistPage: boolean | number;
-  lastPage: boolean | number ;
-  timeout: number;
-  threadCount: 1 | 2 | 3 | 4;
-  sizeWidth: number | boolean;
-  sizeHeight: number | boolean;
-  thumbnailOutPath: string | boolean;
-  thumbnailOutName: string;
-  thumbnailWidth: number | boolean;
-  thumbnailHeight: number | boolean;
-  thumbnailFmt: "jpeg" | "png";
-  jpegQuality: boolean | number;
-  isProgressive: boolean | number;
-  isOptimize: boolean | number;
-}
-
 import { spawn } from "child_process";
+import { existsSync } from "fs";
 import  path from "path";
+
+import { IRunConverter, IConvertPDFToImage} from "./types"
 
 // instancia do processo filho que ira executar o script em python
 function runConverter({
@@ -102,24 +55,16 @@ function runConverter({
         timeout,
     });
 
-    pyprog.stdout.on('data', (data:any) => {
-      console.log(`stdout: ${data.toString()}`);
-      resolve(data)
+    pyprog.stderr.on('data', (data: Buffer) => {
+      reject(data.toString())
     })
 
-    pyprog.stderr.on('data', (data: any) => {
-      console.log(`stderr: ${data.toString()}`);
-      reject(data)
-    })
-
-    pyprog.on('error', (error:any) => {
-      console.log(`stderr: ${error.toString()}`);
-      reject(error)
+    pyprog.on('error', (error: Buffer) => {
+      reject(error.toString())
     })
 
     pyprog.on('close', (code:any) => {
-      if (code == 0)
-      resolve(true);
+      if (code == 0) resolve(true);
       else reject(new Error("erro na conversão do pdf"));
     })
   })
@@ -141,6 +86,10 @@ export async function convertPDFToImage({
   jpegOptions,
 }: IConvertPDFToImage) {
   try {
+    if (!existsSync(pdfPath)) throw new Error("Arquivo não encontrado");
+    if (!existsSync(outPutFolder)) throw new Error("Pasta de destino não encontrada");
+    if (thumbnail?.outPath && !existsSync(thumbnail?.outPath)) throw new Error("Pasta de destino das thumbnails não encontrada");
+
     const params = {
       pdfPath ,
       outPutFolder,
@@ -162,24 +111,10 @@ export async function convertPDFToImage({
       isProgressive: jpegOptions?.progressive || true,
       isOptimize: jpegOptions?.optimize || true,
     } as IRunConverter;
-    const res : any = await runConverter(params);
-    console.log(res.toString());
+    await runConverter(params);
   } catch(err : any) {
     throw err.toString();
   }
 }
 
-// teste
-convertPDFToImage({
-  pdfPath:`${__dirname}/pdf-example.pdf`,
-  outPutFolder: `${__dirname}/out`,
-  outPutName: "teste2",
-  fmt: "png",
-  thumbnail: {
-    outPath: `${__dirname}/thumb`,
-  }
-}).then((res) => {
-  console.log("res", res);
-}).catch((err) => {
-  console.log("err", err);
-});
+export default { convertPDFToImage };
