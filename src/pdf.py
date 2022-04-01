@@ -50,7 +50,3 @@ if params['thumbnailOutPath']:
         image.thumbnail((params['thumbnailWidth'] or width, params['thumbnailHeight'] or height))
         image.save(params['thumbnailOutPath'] + '/{}-{}.{}'.format(
             params['thumbnailOutName'],i, params['thumbnailFmt']), params['thumbnailFmt'].upper())
-
-    print("sucess")
-else:
-    print("sucess")
