@@ -12,8 +12,8 @@
   ## Dependências
 
   - Python 3 : [python3](https://www.python.org/downloads/)
-  - Biblioteca Python: [pdf2image](https://pdf2image.readthedocs.io/en/latest/)
   - Pillow: [Pillow](https://pillow.readthedocs.io/en/stable/)
+  - Biblioteca Python: [pdf2image](https://pdf2image.readthedocs.io/en/latest/)
 
   ### Linux SO
   - poppler-utils : [poppler-utils](https://howtoinstall.co/pt/poppler-utils)

@@ -1,7 +1,7 @@
 {
   "name": "pdf2image-py",
   "version": "0.0.1",
-  "description": "Conversor de pdfs para imagens em script python",
+  "description": "Biblioteca para converter PDF para imagens",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -15,7 +15,21 @@
   },
   "keywords": [
     "python",
-    "child_node"
+    "child_node",
+    "pdf",
+    "image",
+    "converter",
+    "jpeg",
+    "png",
+    "jpg",
+    "tiff",
+    "node-red",
+    "pdf2image-py-node",
+    "pdf2image-py-nodejs",
+    "pdf2ImageConverter",
+    "pdf2ImageConverterNode",
+    "pdf2ImageConverterNodejs",
+    "pdf2imageJpeg"
   ],
   "author": "devsergionunes",
   "license": "ISC",
