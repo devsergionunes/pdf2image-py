@@ -1,7 +1,5 @@
 # Descrição
-  Projeto criado apartir de uma necessidade, quando fui busca alguma biblioteca de conversão e PDFs para imagens em formato JPEG nao encontrei nenhuma biblioteca que funcionasse. Entao criei essa solução com uma biblioteca em Python. Seu modo de funcionamento é muito simples, é instanciado um subprocesso no node aonde o script python é executado.
-
-  Biblioteca Python: [pdf2image](https://pdf2image.readthedocs.io/en/latest/)
+  Lib de conversão de PDFs para imagens, a conversão é feita com um script em  python. Para entender é bem simples eu crio um método no node que instancia um processo filho em paralelo com o processo principal, nesse novo processo filho então é executado o script em python que converte os PDFs.
 
 <hr />
 
@@ -94,5 +92,10 @@
     - Versão das dependencias
     - Versão do node
     - Versão do pdf2image-py
+
+# Testes
+  ```js
+  npm test
+  ```
 
 
