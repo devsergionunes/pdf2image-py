@@ -6,7 +6,7 @@ const pdfPath = join(__dirname, "pdf-example.pdf");
 const outPutFolder = join(__dirname, "out");
 const pagesPdfLength = 3;
 
-describe("Testes de conversão sem criar thumbnails", () => {
+describe("Conversion test without creating thumbnails", () => {
   beforeEach(async () => {
     return await mkdir(outPutFolder)
   })
@@ -14,7 +14,7 @@ describe("Testes de conversão sem criar thumbnails", () => {
     return await rmdir(outPutFolder, { recursive: true })
   });
 
-  it("Teste com os parametros obrigatorios", async () => {
+  it("Test with mandatory parameters", async () => {
     await convertPDFToImage({
       pdfPath: pdfPath,
       outPutFolder: outPutFolder,
@@ -23,7 +23,7 @@ describe("Testes de conversão sem criar thumbnails", () => {
     expect(outImage.length).toBe(pagesPdfLength);
   });
 
-  it("Teste com os parametros opcionais", async () => {
+  it("Test by passing only optional parameters", async () => {
     await convertPDFToImage({
       pdfPath: pdfPath,
       outPutFolder: outPutFolder,
@@ -48,7 +48,7 @@ describe("Testes de conversão sem criar thumbnails", () => {
   //   expect(outImage.length).toBe(1);
   //   });
   
-  it("Teste com path do pdf invalido", async () => {
+  it("Test with invalid pdf path", async () => {
     try {
       await convertPDFToImage({
         pdfPath: "invalid_path",
@@ -59,7 +59,7 @@ describe("Testes de conversão sem criar thumbnails", () => {
     }
   });
 
-  it("Teste com o path da pasta de destino invalida", async () => {
+  it("Test with folder path and destination invalid", async () => {
     try {
       await convertPDFToImage({
         pdfPath: pdfPath,
@@ -70,7 +70,7 @@ describe("Testes de conversão sem criar thumbnails", () => {
     }
   });
 
-  it("Teste com timeout no processo filho", async () => {
+  it("Test with timeout in child process", async () => {
     try {
       await convertPDFToImage({
         pdfPath: pdfPath,

@@ -7,7 +7,7 @@ const outPutFolder = join(__dirname, "out_without_thumbnails");
 const outPutFolderThumbs = join(__dirname, "thumbnails");
 const pagesPdfLength = 3;
 
-describe("Testes de conversão com thumbnails", () => {
+describe("Conversion test with thumbnails", () => {
   beforeEach(async () => {
     await mkdir(outPutFolder)
     await mkdir(outPutFolderThumbs)
@@ -17,7 +17,7 @@ describe("Testes de conversão com thumbnails", () => {
     await rmdir(outPutFolderThumbs, { recursive: true })
   });
 
-  it("Teste com thumbnails e parametros obrigatorios", async () => {
+  it("Test with thumbnails and mandatory parameters", async () => {
     await convertPDFToImage({
       pdfPath: pdfPath,
       outPutFolder: outPutFolder,
@@ -31,7 +31,7 @@ describe("Testes de conversão com thumbnails", () => {
     expect(outImageThumbs.length).toBe(pagesPdfLength);
   });
 
-  it("Teste com os parametros opcionais e thumbnails", async () => {
+  it("Test with optional parameters and thumbnails", async () => {
     await convertPDFToImage({
       pdfPath: pdfPath,
       outPutFolder: outPutFolder,
@@ -70,7 +70,7 @@ describe("Testes de conversão com thumbnails", () => {
   //   expect(outImage.length).toBe(1);
   //   });
 
-  it("Teste com o path da pasta de destino das thumbnails invalida", async () => {
+  it("Test with invalid thumbnails folder path", async () => {
     try {
       await convertPDFToImage({
         pdfPath: pdfPath,
