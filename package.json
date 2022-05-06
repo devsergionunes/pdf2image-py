@@ -1,6 +1,6 @@
 {
   "name": "pdf2image-py",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Biblioteca para converter PDF para imagens",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
