@@ -59,17 +59,6 @@ describe("Conversion test with thumbnails", () => {
     expect(resThumbs.length).toBe(pagesPdfLength);
   });
 
-  // it("Teste convertendo sómente a primeira pagina", async () => {
-  //   await convertPDFToImage({
-  //     pdfPath: pdfPath,
-  //     outPutFolder: outPutFolder,
-  //     fistPage: true,
-  //   });
-  //   const outImage = await readdir(outPutFolder);
-  //   console.log(outImage);
-  //   expect(outImage.length).toBe(1);
-  //   });
-
   it("Test with invalid thumbnails folder path", async () => {
     try {
       await convertPDFToImage({

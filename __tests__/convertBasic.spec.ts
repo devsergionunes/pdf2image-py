@@ -36,17 +36,6 @@ describe("Conversion test without creating thumbnails", () => {
     const res = outImage.filter(async (file) => file.includes("image_name_teste") && file.includes("tif"))
     expect(res.length).toBe(pagesPdfLength);
   });
-
-  // it("Teste convertendo sómente a primeira pagina", async () => {
-  //   await convertPDFToImage({
-  //     pdfPath: pdfPath,
-  //     outPutFolder: outPutFolder,
-  //     fistPage: true,
-  //   });
-  //   const outImage = await readdir(outPutFolder);
-  //   console.log(outImage);
-  //   expect(outImage.length).toBe(1);
-  //   });
   
   it("Test with invalid pdf path", async () => {
     try {

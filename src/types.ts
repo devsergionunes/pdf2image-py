@@ -4,8 +4,6 @@ export interface IConvertPDFToImage {
   outPutName?: string;
   dpi?: 100 | 150 | 200 | 250 | 300;
   fmt?: "jpeg" | "png" | "ppm" | "tif";
-  fistPage?: boolean | number;
-  lastPage?: boolean | number ;
   timeout?: number;
   threadCount?: 1 | 2 | 3 | 4;
   size?: {
@@ -32,8 +30,6 @@ export interface IRunConverter {
   outPutName: string;
   dpi: 100 | 150 | 200 | 250 | 300;
   fmt: "jpeg" | "png" | "ppm" | "tif";
-  fistPage: boolean | number;
-  lastPage: boolean | number ;
   timeout: number;
   threadCount: 1 | 2 | 3 | 4;
   sizeWidth: number | boolean;
