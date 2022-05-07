@@ -17,7 +17,7 @@ const child_process_1 = require("child_process");
 const fs_1 = require("fs");
 const path_1 = __importDefault(require("path"));
 // instancia do processo filho que ira executar o script em python
-function runConverter({ pdfPath, outPutFolder, outPutName, dpi, fmt, timeout, threadCount, fistPage, lastPage, sizeWidth, sizeHeight, thumbnailOutPath, thumbnailOutName, thumbnailWidth, thumbnailHeight, thumbnailFmt, jpegQuality, isProgressive, isOptimize }) {
+function runConverter({ pdfPath, outPutFolder, outPutName, dpi, fmt, timeout, threadCount, sizeWidth, sizeHeight, thumbnailOutPath, thumbnailOutName, thumbnailWidth, thumbnailHeight, thumbnailFmt, jpegQuality, isProgressive, isOptimize }) {
     return new Promise((resolve, reject) => {
         const initPythonScript = path_1.default.join(__dirname, "pdf.py");
         const pyprog = (0, child_process_1.spawn)('python3', [
@@ -29,8 +29,6 @@ function runConverter({ pdfPath, outPutFolder, outPutName, dpi, fmt, timeout, th
                 dpi,
                 fmt,
                 threadCount,
-                fistPage,
-                lastPage,
                 sizeWidth,
                 sizeHeight,
                 thumbnailOutPath,
@@ -59,7 +57,7 @@ function runConverter({ pdfPath, outPutFolder, outPutName, dpi, fmt, timeout, th
         });
     });
 }
-function convertPDFToImage({ pdfPath, outPutFolder, outPutName, dpi, fmt, fistPage, lastPage, size, timeout, threadCount, thumbnail, jpegOptions, }) {
+function convertPDFToImage({ pdfPath, outPutFolder, outPutName, dpi, fmt, size, timeout, threadCount, thumbnail, jpegOptions, }) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             if (!(0, fs_1.existsSync)(pdfPath))
@@ -76,8 +74,6 @@ function convertPDFToImage({ pdfPath, outPutFolder, outPutName, dpi, fmt, fistPa
                 outPutName: outPutName || "image",
                 timeout: timeout || 1000 * 60,
                 threadCount: threadCount || 4,
-                fistPage: !!fistPage ? fistPage : false,
-                lastPage: !!lastPage ? lastPage : false,
                 sizeWidth: size && size.width ? size.width : false,
                 sizeHeight: size && size.height ? size.height : false,
                 thumbnailOutPath: thumbnail && thumbnail.outPath ? thumbnail.outPath : false,
